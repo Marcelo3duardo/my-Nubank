@@ -6,18 +6,25 @@ import Balance from '../../Components/Balance';
 import Movements from '../../Components/Movements';
 import Toast from 'react-native-toast-message';
 import ListMovements from '../../Components/ListMovements';
+import { useEffect } from 'react';
+import { ReloadProvider } from '../../Context/reload'
 
 
 export default function Home() {
+
+
   return (
     <View style={styles.container}>
-      
-      <Header name="Marcelo"/>
-      <Balance saldo="2.000,00" gastos="1.123,00" />
-      <Movements/>
-      <ListMovements/>
-      <StatusBar style="auto" />
-      <Toast/>
+      <ReloadProvider>
+        <Header name="Marcelo" />
+
+        <Balance />
+        <Movements />
+        <ListMovements />
+
+        <StatusBar style="auto" />
+        <Toast />
+      </ReloadProvider>
     </View>
   );
 }
@@ -26,6 +33,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-   
+
   },
 });

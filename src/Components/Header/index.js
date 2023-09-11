@@ -1,17 +1,28 @@
 
-import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity, StatusBar } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Text, TouchableOpacity, TextInput, StatusBar, Pressable } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 
 const heightStatusBar = StatusBar.currentHeight ? StatusBar.currentHeight + 22 : 64
 
-export default function Header({name}) {
-
+export default function Header() {
+    const [userName, setUserName] = useState('User Name')
 
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <Text style={styles.userName}> {name} </Text>
+                <View style={styles.containerName}>
+                    <TextInput
+                        style={styles.userName}
+                        placeholder="Adicione Name"
+                        onChangeText={userName => setUserName(userName)}
+                        defaultValue={userName}
+                        maxLength={25}
+                    />
+
+                    <AntDesign name="edit" size={24} color="white" />
+                </View>
+
                 <TouchableOpacity activeOpacity={0.9} style={styles.buttonUser}>
 
                     <AntDesign name="user" size={27} style={styles.iconUser} color="#157" />
@@ -27,29 +38,33 @@ const styles = StyleSheet.create({
         backgroundColor: "#166891",
         display: "flex",
         flexDirection: "row",
-        
+
         alignItems: "center",
         paddingEnd: 20,
-        paddingBottom:20,
-        paddingStart:20
-        
+        paddingBottom: 20,
+        paddingStart: 20
 
+
+    },
+    containerName:{
+        display: "flex",
+        flexDirection: "row"
     },
     content: {
         flex: 1,
         flexDirection: "row",
-        justifyContent:"space-between",
+        justifyContent: "space-between",
         alignItems: "center",
-    
-        
+
+
 
     },
     userName: {
-        
+
         color: "#fff",
         fontSize: 18,
         fontWeight: "bold",
-        
+
     },
     buttonUser: {
 
@@ -61,7 +76,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
 
     },
-   
+
     iconUser: {
         color: "#fff"
     }

@@ -1,18 +1,24 @@
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Button, Alert, Pressable, TouchableOpacity, Modal } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { TextInputMask } from 'react-native-masked-text';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 
 import Toast, { BaseToast } from 'react-native-toast-message';
+import { ReloadContext } from '../../Context/reload'
 
 export default function Movements() {
 
+
+  const { Atualizar, toggleAtualizar } = useContext(ReloadContext)
+  
   const [inputMoeda, setInputMoeda] = useState('0');
   const [valorMoeda, setValorMoeda] = useState(0)
 
   const [adicionarAtivo, setAdicionarAtivo] = useState(true);
   const [retirarAtivo, setRetirarAtivo] = useState(false);
+
+
 
   const handleAdicionarClick = () => {
     setAdicionarAtivo(true);
@@ -31,12 +37,17 @@ export default function Movements() {
   async function CreateObject() {
     try {
       const id = uuid.v4()
+      const currentDate = new Date();
+      //
+      const formattedDate = `${currentDate.getHours()}:${currentDate.getMinutes()} ${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+
+
       const newMovement = {
         id,
         typeValue: adicionarAtivo,
         description: text,
-        valorMoeda
-
+        valorMoeda,
+        date: formattedDate
       }
       console.log(newMovement)
 
@@ -51,11 +62,13 @@ export default function Movements() {
       await AsyncStorage.setItem('@my-Nubank:Movements', JSON.stringify(data))
 
 
+      toggleAtualizar()
+      
 
       Toast.show({
         type: 'success',
-        text1: 'OK',
-        text2: 'This is some something 👋'
+        text1: newMovement.description,
+        text2: String(newMovement.valorMoeda)
       });
 
     } catch (error) {
@@ -117,6 +130,7 @@ export default function Movements() {
                     onChangeText={onChangeText}
                     value={text}
                     placeholder="Descrição"
+                    maxLength={15}
                   />
                 </SafeAreaView>
                 <TextInputMask
@@ -211,6 +225,7 @@ const styles = StyleSheet.create({
   buttonOpen: {
     minHeight: 40,
     minWidth: 40,
+    top:-40,
 
     backgroundColor: '#166891',
   },
